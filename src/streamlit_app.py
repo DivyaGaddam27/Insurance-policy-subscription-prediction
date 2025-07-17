@@ -12,8 +12,8 @@ import numpy as np
 import joblib
 
 # Load model and scaler
-model = joblib.load("model.pkl")
-scaler = joblib.load("scaler.pkl")
+model = joblib.load("src/model.pkl")
+scaler = joblib.load("src/scaler.pkl")
 
 st.title("📊 Insurance Subscription Predictor")
 st.write("Enter user details to predict if they will subscribe.")

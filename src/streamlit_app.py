@@ -75,7 +75,7 @@ previous = st.number_input("Previous Contacts", value=0)
 pdays = st.number_input("Days Since Last Contact (-1 if never contacted)", value=-1)
 
 job = st.selectbox("Job", [
-    'admin', 'blue-collar', 'entrepreneur', 'housemaid', 'management',
+    'admin.', 'blue-collar', 'entrepreneur', 'housemaid', 'management',
     'retired', 'self-employed', 'services', 'student', 'technician',
     'unemployed', 'unknown'
 ])

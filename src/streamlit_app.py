@@ -48,7 +48,7 @@ def load_and_train():
 
     val_accuracy = accuracy_score(y_val, model.predict(X_val_scaled))
 
-    return model, scaler, val_accuracy
+    return model, scaler, val_accuracy, list(X.columns)
 
 # ------------------ STREAMLIT APP ------------------
 
@@ -56,7 +56,7 @@ st.title("📈 Insurance Subscription ML App")
 st.write("This app trains a model on `Insurance_Train.csv` and allows prediction using new user input.")
 
 with st.spinner("Training model..."):
-    model, scaler, accuracy = load_and_train()
+    model, scaler, accuracy, feature_names = load_and_train()
     st.success(f"✅ Model trained with validation accuracy: **{accuracy:.2%}**")
 
 st.header("🎯 Predict Insurance Subscription for New Customer")
@@ -103,7 +103,7 @@ X_input = np.array([[age, job_map[job], marital_map[marital], education_map[educ
                      balance_age_ratio, duration_campaign_ratio, is_retired,
                      previous_campaigns_success_rate, contacted_before]])
 
-input_df = pd.DataFrame(X_input, columns=X.columns)
+input_df = pd.DataFrame(X_input, columns=feature_names)
 X_scaled = scaler.transform(input_df)
 
 

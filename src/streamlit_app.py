@@ -57,14 +57,14 @@ def load_and_train():
 
 # ------------------ STREAMLIT APP ------------------
 
-st.title("📈 Insurance Subscription ML App")
+st.title("Insurance Subscription ML App")
 st.write("This app trains a model on `Insurance_Train.csv` and allows prediction using new user input.")
 
 with st.spinner("Training model..."):
     model, scaler, accuracy, feature_names, encoders = load_and_train()
     st.success(f"✅ Model trained with validation accuracy: **{accuracy:.2%}**")
 
-st.header("🎯 Predict Insurance Subscription for New Customer")
+st.header("Predict Insurance Subscription for New Customer")
 
 # Input fields
 age = st.number_input("Age", 18, 100, value=35)
@@ -75,7 +75,7 @@ previous = st.number_input("Previous Contacts", value=0)
 pdays = st.number_input("Days Since Last Contact (-1 if never contacted)", value=-1)
 
 job = st.selectbox("Job", [
-    'admin.', 'blue-collar', 'entrepreneur', 'housemaid', 'management',
+    'admin', 'blue-collar', 'entrepreneur', 'housemaid', 'management',
     'retired', 'self-employed', 'services', 'student', 'technician',
     'unemployed', 'unknown'
 ])
@@ -145,7 +145,7 @@ if st.button("🔍 Predict"):
         st.error(f"❌ NO: Unlikely to Subscribe (Probability: {prediction_proba[1]:.2%})")
     
     # Show feature importance for debugging
-    with st.expander("🔍 Feature Values (for debugging)"):
+    with st.expander("🔍 Feature Values: "):
         st.write("Input feature values:")
         feature_df = pd.DataFrame({
             'Feature': feature_names,

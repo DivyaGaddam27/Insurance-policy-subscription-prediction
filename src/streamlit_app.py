@@ -11,8 +11,9 @@ from sklearn.metrics import accuracy_score
 
 @st.cache_data
 def load_and_train():
-    train_data = pd.read_csv('Insurance_Train.csv')
-    test_data = pd.read_csv('Insurance_Test.csv')
+    train_data = pd.read_csv('src/Insurance_Train.csv')
+
+    test_data = pd.read_csv('src/Insurance_Test.csv')
 
     train_data['balance_age_ratio'] = train_data['balance'] / train_data['age']
     test_data['balance_age_ratio'] = test_data['balance'] / test_data['age']

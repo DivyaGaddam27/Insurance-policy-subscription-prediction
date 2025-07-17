@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
@@ -12,35 +11,27 @@ from sklearn.metrics import accuracy_score
 @st.cache_data
 def load_and_train():
     train_data = pd.read_csv('src/Insurance_Train.csv')
-
     test_data = pd.read_csv('src/Insurance_Test.csv')
 
-    train_data['balance_age_ratio'] = train_data['balance'] / train_data['age']
-    test_data['balance_age_ratio'] = test_data['balance'] / test_data['age']
+    # Feature Engineering
+    for df in [train_data, test_data]:
+        df['balance_age_ratio'] = df['balance'] / df['age']
+        df['duration_campaign_ratio'] = df['duration'] / df['campaign']
+        df['is_retired'] = (df['job'] == 'retired').astype(int)
+        df['previous_campaigns_success_rate'] = df['previous'] / df['campaign']
+        df['contacted_before'] = (df['pdays'] > -1).astype(int)
 
-    train_data['duration_campaign_ratio'] = train_data['duration'] / train_data['campaign']
-    test_data['duration_campaign_ratio'] = test_data['duration'] / test_data['campaign']
+    train_data = train_data.drop(columns=['id'])
+    test_data = test_data.drop(columns=['id'])
 
-    train_data['is_retired'] = (train_data['job'] == 'retired').astype(int)
-    test_data['is_retired'] = (test_data['job'] == 'retired').astype(int)
-
-    train_data['previous_campaigns_success_rate'] = train_data['previous'] / train_data['campaign']
-    test_data['previous_campaigns_success_rate'] = test_data['previous'] / test_data['campaign']
-
-    train_data['contacted_before'] = (train_data['pdays'] > -1).astype(int)
-    test_data['contacted_before'] = (test_data['pdays'] > -1).astype(int)
-
-    train_data = train_data.drop(train_data.columns[0], axis=1)
-    test_ids = test_data['id']
-    test_data = test_data.drop(test_data.columns[0], axis=1)
-
+    # Label Encoding
     encoder = LabelEncoder()
     categorical_columns = ['job', 'marital', 'education', 'housing', 'loan', 'contact', 'month', 'poutcome']
     for col in categorical_columns:
         train_data[col] = encoder.fit_transform(train_data[col])
         test_data[col] = encoder.transform(test_data[col])
 
-    X = train_data.drop(['y'], axis=1)
+    X = train_data.drop('y', axis=1)
     y = train_data['y']
 
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -54,22 +45,16 @@ def load_and_train():
 
     val_accuracy = accuracy_score(y_val, model.predict(X_val_scaled))
 
-    # Save model + scaler
-    joblib.dump(model, 'src/model.pkl')
-    joblib.dump(scaler, 'src/scaler.pkl')
+    return model, scaler, val_accuracy
 
-    return val_accuracy
-
-# ------------------ RUN TRAINING ON LOAD ------------------
+# ------------------ STREAMLIT APP ------------------
 
 st.title("📈 Insurance Subscription ML App")
 st.write("This app trains a model on `Insurance_Train.csv` and allows prediction using new user input.")
 
 with st.spinner("Training model..."):
-    accuracy = load_and_train()
-    st.success(f"✅ Model trained with validation accuracy: **{accuracy:.2f}**")
-
-# ------------------ USER INPUT PREDICTION ------------------
+    model, scaler, accuracy = load_and_train()
+    st.success(f"✅ Model trained with validation accuracy: **{accuracy:.2%}**")
 
 st.header("🎯 Predict Insurance Subscription for New Customer")
 
@@ -115,9 +100,6 @@ X_input = np.array([[age, job_map[job], marital_map[marital], education_map[educ
                      balance_age_ratio, duration_campaign_ratio, is_retired,
                      previous_campaigns_success_rate, contacted_before]])
 
-# Load model & scaler
-model = joblib.load("model.pkl")
-scaler = joblib.load("scaler.pkl")
 X_scaled = scaler.transform(X_input)
 
 if st.button("🔍 Predict"):

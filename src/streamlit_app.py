@@ -1,3 +1,6 @@
+import os
+os.environ["STREAMLIT_HOME"] = os.getcwd()
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -100,7 +103,9 @@ X_input = np.array([[age, job_map[job], marital_map[marital], education_map[educ
                      balance_age_ratio, duration_campaign_ratio, is_retired,
                      previous_campaigns_success_rate, contacted_before]])
 
-X_scaled = scaler.transform(X_input)
+input_df = pd.DataFrame(X_input, columns=X.columns)
+X_scaled = scaler.transform(input_df)
+
 
 if st.button("🔍 Predict"):
     prediction = model.predict(X_scaled)[0]

@@ -69,31 +69,59 @@ campaign = st.number_input("Campaign Contacts", 1)
 previous = st.number_input("Previous Contacts")
 pdays = st.number_input("Days Since Last Contact", -1)
 
-job = st.selectbox("Job", ['admin.', 'technician', 'retired'])
-marital = st.selectbox("Marital", ['married', 'single'])
-education = st.selectbox("Education", ['secondary', 'tertiary'])
-housing = st.selectbox("Housing Loan", ['yes', 'no'])
-loan = st.selectbox("Personal Loan", ['yes', 'no'])
-contact = st.selectbox("Contact", ['cellular', 'telephone'])
-month = st.selectbox("Month", ['may', 'jul'])  # Extend as needed
-poutcome = st.selectbox("Previous Outcome", ['success', 'failure'])
+job = st.selectbox("Job", [
+    'admin.', 'blue-collar', 'entrepreneur', 'housemaid', 'management',
+    'retired', 'self-employed', 'services', 'student', 'technician',
+    'unemployed', 'unknown'
+])
+
+marital = st.selectbox("Marital", ['divorced', 'married', 'single'])
+
+education = st.selectbox("Education", ['primary', 'secondary', 'tertiary', 'unknown'])
+
+housing = st.selectbox("Housing Loan", ['no', 'yes'])
+
+loan = st.selectbox("Personal Loan", ['no', 'yes'])
+
+contact = st.selectbox("Contact", ['cellular', 'telephone', 'unknown'])
+
+month = st.selectbox("Month", [
+    'apr', 'aug', 'dec', 'feb', 'jan', 'jul',
+    'jun', 'mar', 'may', 'nov', 'oct', 'sep'
+])
+
+poutcome = st.selectbox("Previous Outcome", ['failure', 'other', 'success', 'unknown'])
+
 
 # Encoding maps
-job_map = {'admin.': 0, 'technician': 1, 'retired': 2}
-marital_map = {'married': 0, 'single': 1}
-education_map = {'secondary': 0, 'tertiary': 1}
-housing_map = {'yes': 1, 'no': 0}
-loan_map = {'yes': 1, 'no': 0}
-contact_map = {'cellular': 0, 'telephone': 1}
-month_map = {'may': 0, 'jul': 1}
-poutcome_map = {'success': 1, 'failure': 0}
+job_map = {'admin.': 0, 'blue-collar': 1, 'entrepreneur': 2, 'housemaid': 3,
+           'management': 4, 'retired': 5, 'self-employed': 6, 'services': 7,
+           'student': 8, 'technician': 9, 'unemployed': 10, 'unknown': 11}
+
+marital_map = {'divorced': 0, 'married': 1, 'single': 2}
+
+education_map = {'primary': 0, 'secondary': 1, 'tertiary': 2, 'unknown': 3}
+
+housing_map = {'no': 0, 'yes': 1}
+
+loan_map = {'no': 0, 'yes': 1}
+
+contact_map = {'cellular': 0, 'telephone': 1, 'unknown': 2}
+
+month_map = {'apr': 0, 'aug': 1, 'dec': 2, 'feb': 3, 'jan': 4, 'jul': 5,
+             'jun': 6, 'mar': 7, 'may': 8, 'nov': 9, 'oct': 10, 'sep': 11}
+
+poutcome_map = {'failure': 0, 'other': 1, 'success': 2, 'unknown': 3}
+
 
 # Feature engineering
-balance_age_ratio = balance / age
-duration_campaign_ratio = duration / campaign
+balance_age_ratio = balance / age if age > 0 else 0
+duration_campaign_ratio = duration / campaign if campaign > 0 else 0
+previous_campaigns_success_rate = previous / campaign if campaign > 0 else 0
+
 is_retired = 1 if job == 'retired' else 0
-previous_campaigns_success_rate = previous / campaign
 contacted_before = 1 if pdays > -1 else 0
+
 
 # Input vector
 X_input = np.array([[age, job_map[job], marital_map[marital], education_map[education],
@@ -102,6 +130,8 @@ X_input = np.array([[age, job_map[job], marital_map[marital], education_map[educ
                      balance, duration,
                      balance_age_ratio, duration_campaign_ratio, is_retired,
                      previous_campaigns_success_rate, contacted_before]])
+
+
 
 input_df = pd.DataFrame(X_input, columns=feature_names)
 X_scaled = scaler.transform(input_df)

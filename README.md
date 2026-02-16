@@ -91,7 +91,7 @@ Add user authentication
 
 Add data validation and logging
 
-👩‍💻 Author
+Author
 
 Divya Gaddam
 

@@ -1,98 +1,57 @@
-Insurance Policy Subscription Prediction (ML App)
+# Insurance Policy Subscription Prediction (ML App)
 
-A machine learning web application that predicts whether a customer is likely to subscribe to an insurance policy based on their demographic and financial details. The model is deployed as an interactive Streamlit app and hosted on Hugging Face Spaces.
+A machine learning web application that predicts whether a customer is likely to subscribe to an insurance policy based on their demographic and financial details. The model is deployed as an interactive **Streamlit** app and hosted on **Hugging Face Spaces**.
 
-🔗 Live Demo (Hugging Face Space):
+🔗 **Live Demo (Hugging Face Space):**  
 https://huggingface.co/spaces/Divyag26/insurance-prediction
 
-Features
+---
 
-Predicts insurance policy subscription (Yes / No)
+## Features
 
-Clean and interactive Streamlit UI
+- Predicts insurance policy subscription (Yes / No)
+- Interactive Streamlit UI
+- Feature scaling and preprocessing
+- Deployed on Hugging Face Spaces (Docker)
+- Model and scaler tracked with Git LFS
 
-Preprocessing with feature scaling
+---
 
-Trained ML model integrated into a deployed web app
+## Tech Stack
 
-Dockerized for easy deployment
+- **Language:** Python  
+- **ML Libraries:** scikit-learn, pandas, numpy  
+- **Web App:** Streamlit  
+- **Deployment:** Hugging Face Spaces (Docker)  
+- **Version Control:** Git + GitHub  
+- **Model Storage:** Git LFS  
 
-Model and scaler stored using Git LFS
+---
 
-Tech Stack
+## Model & Workflow
 
-Language: Python
+1. Data preprocessing and feature engineering  
+2. Train classification model on insurance dataset  
+3. Save trained model (`model.pkl`) and scaler (`scaler.pkl`)  
+4. Build Streamlit UI for user input  
+5. Load model & scaler for real-time prediction  
+6. Deploy app on Hugging Face Spaces using Docker  
 
-ML Libraries: scikit-learn, pandas, numpy
+---
 
-Web App: Streamlit
+## Project Structure
 
-Deployment: Hugging Face Spaces (Docker-based)
-
-Version Control: Git + GitHub
-
-Model Storage: Git LFS
-
-Model & Workflow
-
-Data preprocessing and feature engineering
-
-Train classification model on insurance dataset
-
-Save trained model (model.pkl) and scaler (scaler.pkl)
-
-Build Streamlit UI for user input
-
-Load model & scaler for real-time prediction
-
-Deploy app on Hugging Face Spaces using Docker
-
-Project Structure
+```text
 Insurance-policy-subscription-prediction/
 │
 ├── src/
-│   ├── streamlit_app.py     # Streamlit UI
-│   ├── model.pkl            # Trained ML model
-│   ├── scaler.pkl           # Feature scaler
-│   ├── Insurance_Train.csv  # Training data
-│   └── Insurance_Test.csv   # Test data
+│   ├── streamlit_app.py
+│   ├── model.pkl
+│   ├── scaler.pkl
+│   ├── Insurance_Train.csv
+│   └── Insurance_Test.csv
 │
 ├── Dockerfile
 ├── requirements.txt
 ├── README.md
 └── .gitattributes
-
-How to Run Locally
-git clone https://github.com/DivyaGaddam27/Insurance-policy-subscription-prediction.git
-cd Insurance-policy-subscription-prediction
-
-pip install -r requirements.txt
-streamlit run src/streamlit_app.py
-
-
-Then open:
-
-http://localhost:8501
-
-Deployment
-
-The app is deployed on Hugging Face Spaces using Docker.
-Model files are tracked using Git LFS to handle large files efficiently.
-
-Future Improvements
-
-Add model performance metrics (Accuracy, ROC-AUC) to UI
-
-Add model comparison (Logistic Regression vs Random Forest)
-
-Improve feature engineering
-
-Add user authentication
-
-Add data validation and logging
-
-Author
-
-Divya Gaddam
-
-Hugging Face: https://huggingface.co/Divyag26
